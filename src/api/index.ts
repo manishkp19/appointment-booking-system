@@ -1,3 +1,10 @@
+export interface BookSlotAPIresponse {
+    id: string,
+    startDate: string,
+    isBooked: boolean,
+    bookedCustomerName: string
+}
+
 export const getSlots = async ({ date }: { date: string }) => {
     const encodedDate = encodeURIComponent(date);
     const res = await fetch(`/api/getSlots?date=${encodedDate}&isBooked=false`)
@@ -24,8 +31,14 @@ export const cancelSlot = async ({ slotId }: { slotId: string }) => {
     return data.data;
 }
 
-export const getBookedSlot = async ({ slotId }: { slotId: string }) => {
+export const getBookedSlot = async ({ slotId }: { slotId: string }): Promise<BookSlotAPIresponse> => {
     const res = await fetch(`/api/bookedSlot/${slotId}`);
+    const data = await res.json();
+    return data.data;
+}
+
+export const getAllBookedSlots = async () => {
+    const res = await fetch(`/api/getSlots?isBooked=true`)
     const data = await res.json();
     return data.data;
 }
